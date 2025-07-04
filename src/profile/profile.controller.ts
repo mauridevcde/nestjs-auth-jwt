@@ -22,6 +22,7 @@ export class ProfileController {
   ) { }
 
   @Post()
+  @Auth(Role.ADMIN)
   create(@Body() createProfileDto: CreateProfileDto) {
     return this.profileService.create(createProfileDto);
   }

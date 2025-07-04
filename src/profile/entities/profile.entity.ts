@@ -1,6 +1,6 @@
 
 import { User } from "../../users/entities/user.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Profile {
@@ -16,6 +16,6 @@ export class Profile {
     @Column()
     age: number;
 
-    @OneToOne(() => User, (user) => user.profile) // Relación inversa
+    @OneToOne(() => User, user => user.profile)
     user: User;
 }

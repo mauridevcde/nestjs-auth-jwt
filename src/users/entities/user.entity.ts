@@ -20,9 +20,8 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
-  
-  // Relación 1 a 1 con Profile
-  @OneToOne(() => Profile)
-  @JoinColumn()// indica que esta tabla tendrá la FK
+
+  @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
+  @JoinColumn()
   profile: Profile;
 }
