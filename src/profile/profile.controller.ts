@@ -1,25 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UsersService } from 'src/users/users.service';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Role } from 'src/auth/enums/role.enum';
 
+interface RequestWithUser extends Request {
+  user: { email: string; role: string };
+}
 @Controller('profile')
 export class ProfileController {
   constructor(
-    
+
     private readonly profileService: ProfileService,
     private readonly userService: UsersService,
-    
-  ) {}
+
+  ) { }
 
   @Post()
   create(@Body() createProfileDto: CreateProfileDto) {
     return this.profileService.create(createProfileDto);
   }
 
+
   @Get()
-  findAll() {
+  @Auth(Role.ADMIN, Role.MANAGER)
+  findAll(@Request() req: RequestWithUser) {
     return this.profileService.findAll();
   }
 
